@@ -16,7 +16,7 @@ export class User {
   login!: string;
 
   @ApiProperty({example: 'not12345', description: 'Пароль'})
-  @Column({ type: 'varchar', length: 30 })
+  @Column({ type: 'varchar', length: 100 })
   password!: string;
 
   @ApiProperty({example: 'Ivan', description: 'Имя'})

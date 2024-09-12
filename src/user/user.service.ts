@@ -11,18 +11,18 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async createUser(dto: CreateUserDto) {
+  async createUser(dto: CreateUserDto): Promise<User> {
     const newUser = this.userRepository.create(dto); // не нужен await? в видосе был нужен
     await this.userRepository.save(newUser);
     return newUser;
   }
 
-  async getAllUsers() {
+  async getAllUsers(): Promise<User[]> {
     const users = await this.userRepository.find();
     return users;
   }
 
-  async deleteUser(userID: string) {
+  async deleteUser(userID: string): Promise<User> {
     // await this.userRepository
     // .createQueryBuilder()
     // .delete()
@@ -40,7 +40,7 @@ export class UserService {
   async getUserById(userID: string) {
     const user = this.userRepository.findOneBy({id: +userID});
     if (!user) {
-      throw new Error('Такого пользователя не существует')
+      throw new Error('Такого пользователя не существует');
     }
     return user;
   }
@@ -58,5 +58,10 @@ export class UserService {
     //   id: userID,
 
     // });
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.userRepository.findOneBy({email});
+    return user;
   }
 }

@@ -22,7 +22,11 @@ export class UserController {
   @ApiResponse({status: 200, type: [User]})
   @Get('get-all-users')
   async getAllUsers() {
-    return this.userService.getAllUsers();
+    try {
+      return await this.userService.getAllUsers();
+    } catch(err) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
   }
 
   @Delete('delete-user/:userID')
@@ -31,9 +35,9 @@ export class UserController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     try {
-      return this.userService.deleteUser(userID);
+      return await this.userService.deleteUser(userID);
     } catch(err) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      throw new HttpException(err.message, HttpStatus.FORBIDDEN);
     }
   }
 
@@ -53,6 +57,10 @@ export class UserController {
   @Patch('update-self/:userID')
   async updateUserById(@Param('userID') userID: string,
   @Body() userDto: CreateUserDto) {
-    return this.userService.updateUserById(userID, userDto);
+    try {
+      return await this.userService.updateUserById(userID, userDto);
+    } catch(err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    }
   } 
 }
