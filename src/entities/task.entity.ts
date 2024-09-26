@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { ColumnBox } from './column.entity';
 
 @Entity()
 export class Task {
@@ -22,4 +23,7 @@ export class Task {
   @ApiProperty({example: '0', description: 'Позиция, очередность задачи внутри колонки'})
   @Column({ type: 'int', length: 100 })
   verticalPosition!: number;
+
+  @ManyToOne(() => ColumnBox, (column) => column.tasks, { onDelete: 'CASCADE' })
+  column: ColumnBox;
 }

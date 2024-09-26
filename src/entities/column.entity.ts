@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Task } from './task.entity';
+import { Desk } from './desk.entity';
 
 @Entity()
 export class ColumnBox {
@@ -16,11 +17,16 @@ export class ColumnBox {
   @Column({ type: 'timestamptz', length: 100 })
   dateOfCreation!: Date;
 
-  @ApiProperty({example: '0', description: 'Позиция, очередность колонки'})
-  @Column({ type: 'int', length: 100 })
-  horizontalPosition!: number;
+//   @ApiProperty({example: '0', description: 'Позиция, очередность колонки'})
+//   @Column({ type: 'int', length: 100, /* unique: true */})
+//   horizontalPosition!: number;
+// будут дополнительные две таблицы, которые хранят в себе инфу о позиции колонки и отдельная таблица для положения тасков
 
-  @ApiProperty({example: '[[...], [...]]', description: 'Массив сущностей Desk'})
-  @Column({ type: 'array'})
-  columns!: Array<Task>;
+// круд начинать с верхнего уровня (с проджекта т.е.)
+
+  @ManyToOne(() => Desk, (desk) => desk.columns, { onDelete: 'CASCADE' })
+  desk: Desk;
+
+  @OneToMany(() => Task, (task) => task.column, { cascade: true })
+  tasks: Task[];
 }

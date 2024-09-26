@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Desk } from './desk.entity';
 
 @Entity()
@@ -20,7 +20,8 @@ export class Project {
   @Column({ type: 'timestamptz', length: 100 })
   dateOfCreation!: Date;
 
-  @ApiProperty({example: '[[...], [...]]', description: 'Массив сущностей Desk'})
-  @Column({ type: 'array'})
-  desks!: Array<Desk>;
+  @OneToMany(() => Desk, (desk) => desk.project, { cascade: true })
+  desks: Desk[];
 }
+
+// сделать внешний ключ. мб массив чисел
