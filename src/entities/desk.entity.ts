@@ -26,4 +26,7 @@ export class Desk {
 
   @OneToMany(() => ColumnBox, (column) => column.desk, { cascade: true })
   columns: ColumnBox[];
+
+  // user_id
+
 }

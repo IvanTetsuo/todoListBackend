@@ -14,7 +14,7 @@ export class ColumnBox {
   name!: string;
 
   @ApiProperty({example: '00.00.0000 / 00:00', description: 'Дата и время создания'})
-  @Column({ type: 'timestamptz', length: 100 })
+  @Column({ type: 'timestamptz'}) // нужен ли length
   dateOfCreation!: Date;
 
 //   @ApiProperty({example: '0', description: 'Позиция, очередность колонки'})
@@ -29,4 +29,7 @@ export class ColumnBox {
 
   @OneToMany(() => Task, (task) => task.column, { cascade: true })
   tasks: Task[];
+
+  // user_id
+
 }

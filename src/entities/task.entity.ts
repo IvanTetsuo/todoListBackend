@@ -26,4 +26,7 @@ export class Task {
 
   @ManyToOne(() => ColumnBox, (column) => column.tasks, { onDelete: 'CASCADE' })
   column: ColumnBox;
+
+  // user_id
+
 }

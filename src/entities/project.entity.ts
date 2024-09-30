@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
 import { Desk } from './desk.entity';
 
 @Entity()
@@ -22,6 +22,8 @@ export class Project {
 
   @OneToMany(() => Desk, (desk) => desk.project, { cascade: true })
   desks: Desk[];
+
+  // user_id
 }
 
 // сделать внешний ключ. мб массив чисел

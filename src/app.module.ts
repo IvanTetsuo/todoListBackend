@@ -8,6 +8,7 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProjectModule } from './project/project.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     UserModule,
     AuthModule,
+    ProjectModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService, AuthService],
