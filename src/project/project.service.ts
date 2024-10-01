@@ -41,7 +41,7 @@ export class ProjectService {
     async updateProjectById(projectID: string, projectData: Project) {
         const project = await this.projectRepository.findOneBy({id: +projectID});
         if (!project) {
-          throw new Error('Такого пользователя не существует');
+          throw new Error('Такого проекта не существует');
         }
         Object.assign(project, projectData);
         return await this.projectRepository.save(project);

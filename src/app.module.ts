@@ -9,6 +9,11 @@ import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProjectModule } from './project/project.module';
+import { DeskController } from './desk/desk.controller';
+import { DeskModule } from './desk/desk.module';
+import { ColumnController } from './column/column.controller';
+import { ColumnModule } from './column/column.module';
+import { TaskModule } from './task/task.module';
 
 
 @Module({
@@ -33,8 +38,11 @@ import { ProjectModule } from './project/project.module';
     UserModule,
     AuthModule,
     ProjectModule,
+    DeskModule,
+    ColumnModule,
+    TaskModule,
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController, AuthController, DeskController, ColumnController],
   providers: [AppService, AuthService],
 })
 export class AppModule {}

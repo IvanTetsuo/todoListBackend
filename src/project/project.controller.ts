@@ -9,12 +9,12 @@ export class ProjectController {
     constructor(private projectService: ProjectService) {}
 
     @Post('create-new-project')
-    async createUser(@Body() projectData: Project) {
+    async createProject(@Body() projectData: Project) {
         return this.projectService.createProject(projectData);
     }
 
     @Get('get-all-projects')
-    async getAllUsers() {
+    async getAllProjects() {
         try {
             return await this.projectService.getAllProjects();
         } catch(err) {
@@ -22,7 +22,7 @@ export class ProjectController {
         }
     }
 
-    @Delete('delete-user/:projectID')
+    @Delete('delete-project/:projectID')
     async deleteProject(@Param('projectID') projectID: string) {
         if (!projectID) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
