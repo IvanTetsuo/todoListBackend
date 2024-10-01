@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { ColumnBox } from './column.entity';
 import { Project } from './project.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Desk {
@@ -18,7 +19,7 @@ export class Desk {
   description!: string;
 
   @ApiProperty({example: '00.00.0000 / 00:00', description: 'Дата и время создания'})
-  @Column({ type: 'timestamptz', length: 100 })
+  @Column({ type: 'timestamptz', default: 'NOW()'})
   dateOfCreation!: Date;
 
   @ManyToOne(() => Project, (project) => project.desks, { onDelete: 'CASCADE' })
@@ -26,6 +27,9 @@ export class Desk {
 
   @OneToMany(() => ColumnBox, (column) => column.desk, { cascade: true })
   columns: ColumnBox[];
+
+  @ManyToOne(() => User, (user) => user.desks, { onDelete: 'CASCADE' })
+  user: User;
 
   // user_id
 

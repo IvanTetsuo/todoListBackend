@@ -10,6 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [ProjectController],
   providers: [ProjectService],
-  exports: [ProjectModule],
+  exports: [ProjectService],
 })
 export class ProjectModule {}

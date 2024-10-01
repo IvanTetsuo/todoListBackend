@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Project } from './project.entity';
+import { Desk } from './desk.entity';
+import { ColumnBox } from './column.entity';
+import { Task } from './task.entity';
 
 @Entity()
 export class User {
@@ -26,4 +30,19 @@ export class User {
   @ApiProperty({example: 'Ivanov', description: 'Фамилия'})
   @Column({ type: 'varchar', length: 20 })
   surname!: string;
+
+
+
+
+  @OneToMany(() => Project, (project) => project.user, { onDelete: 'CASCADE' })
+  projects: Project[];
+
+  @OneToMany(() => Desk, (desk) => desk.user, { onDelete: 'CASCADE' })
+  desks: Desk[];
+
+  @OneToMany(() => ColumnBox, (column) => column.user, { onDelete: 'CASCADE' })
+  columns: ColumnBox[];
+
+  @OneToMany(() => Task, (task) => task.user, { onDelete: 'CASCADE' })
+  tasks: Task[];
 }

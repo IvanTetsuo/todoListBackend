@@ -10,6 +10,6 @@ import { Desk } from 'src/entities/desk.entity';
   ],
   controllers: [DeskController],
   providers: [DeskService],
-  exports: [DeskModule],
+  exports: [DeskService],
 })
 export class DeskModule {}

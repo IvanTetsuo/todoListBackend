@@ -10,6 +10,6 @@ import { ColumnController } from './column.controller';
   ],
   controllers: [ColumnController],
   providers: [ColumnService],
-  exports: [ColumnModule]
+  exports: [ColumnService]
 })
 export class ColumnModule {}

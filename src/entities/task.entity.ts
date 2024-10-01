@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ColumnBox } from './column.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Task {
@@ -17,15 +18,18 @@ export class Task {
   description!: string;
 
   @ApiProperty({example: '00.00.0000 / 00:00', description: 'Дата и время создания'})
-  @Column({ type: 'timestamptz', length: 100 })
+  @Column({ type: 'timestamptz', default: 'NOW()'})
   dateOfCreation!: Date;
 
   @ApiProperty({example: '0', description: 'Позиция, очередность задачи внутри колонки'})
-  @Column({ type: 'int', length: 100 })
+  @Column({ type: 'int'})
   verticalPosition!: number;
 
   @ManyToOne(() => ColumnBox, (column) => column.tasks, { onDelete: 'CASCADE' })
   column: ColumnBox;
+
+  @ManyToOne(() => User, (user) => user.tasks, { onDelete: 'CASCADE' })
+  user: User;
 
   // user_id
 

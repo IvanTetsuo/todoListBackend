@@ -10,6 +10,6 @@ import { Task } from 'src/entities/task.entity';
   ],
   controllers: [TaskController],
   providers: [TaskService],
-  exports: [TaskModule],
+  exports: [TaskService],
 })
 export class TaskModule {}

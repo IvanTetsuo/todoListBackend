@@ -22,7 +22,7 @@ export class DeskController {
     }
 
     @Delete('delete-desk/:deskID')
-    async deleteProject(@Param('deskID') deskID: string) {
+    async deleteDesk(@Param('deskID') deskID: string) {
         if (!deskID) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }

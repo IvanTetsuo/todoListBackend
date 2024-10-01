@@ -14,6 +14,10 @@ import { DeskModule } from './desk/desk.module';
 import { ColumnController } from './column/column.controller';
 import { ColumnModule } from './column/column.module';
 import { TaskModule } from './task/task.module';
+import { Project } from './entities/project.entity';
+import { Desk } from './entities/desk.entity';
+import { ColumnBox } from './entities/column.entity';
+import { Task } from './entities/task.entity';
 
 
 @Module({
@@ -31,6 +35,10 @@ import { TaskModule } from './task/task.module';
       database: 'todo_list',
       entities: [
         User,
+        Project,
+        Desk,
+        ColumnBox,
+        Task
         // __dirname + '/../**/*.entity{.ts,.js}',
       ],
       synchronize: true,
