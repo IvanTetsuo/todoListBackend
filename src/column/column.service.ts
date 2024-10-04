@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ColumnBox } from 'src/entities/column.entity';
+import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -8,10 +9,13 @@ export class ColumnService {
     constructor(
         @InjectRepository(ColumnBox)
         private columnRepository: Repository<ColumnBox>,
+        private readonly userService: UserService,
     ) {}
 
-    async createColumn(columnData: ColumnBox): Promise<ColumnBox> {
+    async createColumn(columnData: ColumnBox, userID: string): Promise<ColumnBox> {
+        const user = await this.userService.getUserById(userID);
         const newColumn = this.columnRepository.create(columnData);
+        newColumn.user = user;
         await this.columnRepository.save(newColumn);
         return newColumn;
     }

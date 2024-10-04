@@ -1,16 +1,19 @@
-import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ProjectService } from './project.service';
 import { Project } from 'src/entities/project.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Проект')
+@UseGuards(JwtAuthGuard)
 @Controller('project')
 export class ProjectController {
     constructor(private projectService: ProjectService) {}
 
     @Post('create-new-project')
-    async createProject(@Body() projectData: Project) {
-        return this.projectService.createProject(projectData);
+    async createProject(@Body() projectData: Project, @Req() request: Request & {user: {id: string}}) {
+        const userID = request.user.id;
+        return this.projectService.createProject(projectData, userID);
     }
 
     @Get('get-all-projects')

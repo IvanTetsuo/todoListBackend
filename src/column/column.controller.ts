@@ -1,15 +1,18 @@
-import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ColumnService } from './column.service';
 import { ColumnBox } from 'src/entities/column.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('column')
 export class ColumnController {
     constructor(private columnService: ColumnService) {}
 
     @Post('create-new-column')
-    async createColumn(@Body() columnData: ColumnBox) {
-        return this.columnService.createColumn(columnData);
+    async createColumn(@Body() columnData: ColumnBox, @Req() request: Request & {user: {id: string}}) {
+        const userID = request.user.id;
+        return this.columnService.createColumn(columnData, userID);
     }
 
     @Get('get-all-columns')

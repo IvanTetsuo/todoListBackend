@@ -27,10 +27,11 @@ export class AuthService {
         return this.generateToken(user);
     }
 
+    //сделать потом срок жизни токену
     private async generateToken(userData: User) {
         const payload = {email: userData.email, id: userData.id};
         return {
-            token: this.jwtService.sign(payload)
+            token: this.jwtService.sign(payload, /* {expiresIn: '2 days'} */)
         };
     }
 

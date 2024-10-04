@@ -21,6 +21,7 @@ export class UserController {
 
   @ApiOperation({summary: 'Получить всех пользователей'})
   @ApiResponse({status: 200, type: [User]})
+  @UseGuards(JwtAuthGuard)
   @Get('get-all-users')
   async getAllUsers() {
     try {
