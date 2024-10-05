@@ -3,6 +3,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { ProjectService } from './project.service';
 import { Project } from 'src/entities/project.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ReqUserID } from 'src/common/user/user.decorator';
+import { User } from 'src/entities/user.entity';
 
 @ApiTags('Проект')
 @UseGuards(JwtAuthGuard)
@@ -11,27 +13,26 @@ export class ProjectController {
     constructor(private projectService: ProjectService) {}
 
     @Post('create-new-project')
-    async createProject(@Body() projectData: Project, @Req() request: Request & {user: {id: string}}) {
-        const userID = request.user.id;
+    async createProject(@Body() projectData: Project, @ReqUserID() userID: string) {
         return this.projectService.createProject(projectData, userID);
     }
 
     @Get('get-all-projects')
-    async getAllProjects() {
+    async getAllProjects(@ReqUserID() userID: string) {
         try {
-            return await this.projectService.getAllProjects();
+            return await this.projectService.getAllProjects(userID);
         } catch(err) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }
 
     @Delete('delete-project/:projectID')
-    async deleteProject(@Param('projectID') projectID: string) {
+    async deleteProject(@Param('projectID') projectID: string, @ReqUserID() userID: string) {
         if (!projectID) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
         try {
-            return await this.projectService.deleteProject(projectID);
+            return await this.projectService.deleteProject(projectID, userID);
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.FORBIDDEN);
         }
@@ -39,22 +40,25 @@ export class ProjectController {
 
     //при ошибке, статус 200
     @Get('get-by/:projectID')
-    async getProjectById(@Param('projectID') projectID: string) {
+    async getProjectById(@Param('projectID') projectID: string, @ReqUserID() userID: string) {
         if (!projectID) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
         try {
-            return await this.projectService.getProjectById(projectID);
+            return await this.projectService.getProjectById(projectID, userID);
         } catch(err) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }
 
     @Patch('update-project/:projectID')
-    async updateProjectById(@Param('projectID') projectID: string,
-    @Body() projectData: Project) {
+    async updateProjectById(
+        @Param('projectID') projectID: string,
+        @Body() projectData: Project,
+        @ReqUserID() userID: string
+    ) {
         try {
-            return await this.projectService.updateProjectById(projectID, projectData);
+            return await this.projectService.updateProjectById(projectID, projectData, userID);
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
         }

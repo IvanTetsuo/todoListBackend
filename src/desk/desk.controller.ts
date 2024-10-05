@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { DeskService } from './desk.service';
 import { Desk } from 'src/entities/desk.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ReqUserID } from 'src/common/user/user.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('desk')
@@ -10,27 +11,26 @@ export class DeskController {
     constructor(private deskService: DeskService) {}
 
     @Post('create-new-desk')
-    async createDesk(@Body() deskData: Desk, @Req() request: Request & {user: {id: string}}) {
-        const userID = request.user.id;
+    async createDesk(@Body() deskData: Desk, @ReqUserID() userID: string) {
         return this.deskService.createDesk(deskData, userID);
     }
 
     @Get('get-all-desks')
-    async getAllDesks() {
+    async getAllDesks(@ReqUserID() userID: string) {
         try {
-            return await this.deskService.getAllDesks();
+            return await this.deskService.getAllDesks(userID);
         } catch(err) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }
 
     @Delete('delete-desk/:deskID')
-    async deleteDesk(@Param('deskID') deskID: string) {
+    async deleteDesk(@Param('deskID') deskID: string, @ReqUserID() userID: string) {
         if (!deskID) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
         try {
-            return await this.deskService.deleteDesk(deskID);
+            return await this.deskService.deleteDesk(deskID, userID);
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.FORBIDDEN);
         }
@@ -38,22 +38,25 @@ export class DeskController {
 
     //при ошибке, статус 200
     @Get('get-by/:deskID')
-    async getDeskById(@Param('deskID') deskID: string) {
+    async getDeskById(@Param('deskID') deskID: string, @ReqUserID() userID: string) {
         if (!deskID) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
         try {
-            return await this.deskService.getDeskById(deskID);
+            return await this.deskService.getDeskById(deskID, userID);
         } catch(err) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }
 
     @Patch('update-desk/:deskID')
-    async updateDeskById(@Param('deskID') deskID: string,
-    @Body() deskData: Desk) {
+    async updateDeskById(
+        @Param('deskID') deskID: string,
+        @Body() deskData: Desk,
+        @ReqUserID() userID: string
+    ) {
         try {
-            return await this.deskService.updateDeskById(deskID, deskData);
+            return await this.deskService.updateDeskById(deskID, deskData, userID);
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
         }

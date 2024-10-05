@@ -20,29 +20,33 @@ export class DeskService {
         return newDesk;
     }
 
-    async getAllDesks(): Promise<Desk[]> {
-        const desks = await this.deskRepository.find();
+    async getAllDesks(userID: string): Promise<Desk[]> {
+        const user = await this.userService.getUserById(userID);
+        const desks = await this.deskRepository.find({where: {user}});
         return desks;
     }
 
-    async deleteDesk(deskID: string): Promise<Desk> {
-        const desk = await this.deskRepository.findOneBy({id: +deskID});
+    async deleteDesk(deskID: string, userID: string): Promise<Desk> {
+        const user = await this.userService.getUserById(userID);
+        const desk = await this.deskRepository.findOneBy({id: +deskID, user});
         if (!desk) {
             throw new Error('Такой доски не существует');
         }
         return await this.deskRepository.remove(desk);
     }
 
-    async getDeskById(deskID: string) {
-        const desk = this.deskRepository.findOneBy({id: +deskID});
+    async getDeskById(deskID: string, userID: string) {
+        const user = await this.userService.getUserById(userID);
+        const desk = this.deskRepository.findOneBy({id: +deskID, user});
         if (!desk) {
           throw new Error('Такой доски не существует');
         }
         return desk;
     }
 
-    async updateDeskById(deskID: string, deskData: Desk) {
-        const desk = await this.deskRepository.findOneBy({id: +deskID});
+    async updateDeskById(deskID: string, deskData: Desk, userID: string) {
+        const user = await this.userService.getUserById(userID);
+        const desk = await this.deskRepository.findOneBy({id: +deskID, user});
         if (!desk) {
           throw new Error('Такой доски не существует');
         }

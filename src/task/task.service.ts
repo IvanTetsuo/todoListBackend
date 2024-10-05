@@ -20,29 +20,33 @@ export class TaskService {
         return newTask;
     }
 
-    async getAllTasks(): Promise<Task[]> {
-        const tasks = await this.taskRepository.find();
+    async getAllTasks(userID: string): Promise<Task[]> {
+        const user = await this.userService.getUserById(userID);
+        const tasks = await this.taskRepository.find({where: {user}});
         return tasks;
     }
 
-    async deleteTask(taskID: string): Promise<Task> {
-        const task = await this.taskRepository.findOneBy({id: +taskID});
+    async deleteTask(taskID: string, userID: string): Promise<Task> {
+        const user = await this.userService.getUserById(userID);
+        const task = await this.taskRepository.findOneBy({id: +taskID, user});
         if (!task) {
             throw new Error('Такого задания не существует');
         }
         return await this.taskRepository.remove(task);
     }
 
-    async getTaskById(taskID: string) {
-        const task = this.taskRepository.findOneBy({id: +taskID});
+    async getTaskById(taskID: string, userID: string) {
+        const user = await this.userService.getUserById(userID);
+        const task = this.taskRepository.findOneBy({id: +taskID, user});
         if (!task) {
           throw new Error('Такого задания не существует');
         }
         return task;
     }
 
-    async updateTaskById(taskID: string, taskData: Task) {
-        const task = await this.taskRepository.findOneBy({id: +taskID});
+    async updateTaskById(taskID: string, taskData: Task, userID: string) {
+        const user = await this.userService.getUserById(userID);
+        const task = await this.taskRepository.findOneBy({id: +taskID, user});
         if (!task) {
           throw new Error('Такого задания не существует');
         }

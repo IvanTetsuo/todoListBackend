@@ -20,29 +20,33 @@ export class ColumnService {
         return newColumn;
     }
 
-    async getAllColumns(): Promise<ColumnBox[]> {
-        const columns = await this.columnRepository.find();
+    async getAllColumns(userID: string): Promise<ColumnBox[]> {
+        const user = await this.userService.getUserById(userID);
+        const columns = await this.columnRepository.find({where: {user}});
         return columns;
     }
 
-    async deleteColumn(columnID: string): Promise<ColumnBox> {
-        const column = await this.columnRepository.findOneBy({id: +columnID});
+    async deleteColumn(columnID: string, userID: string): Promise<ColumnBox> {
+        const user = await this.userService.getUserById(userID);
+        const column = await this.columnRepository.findOneBy({id: +columnID, user});
         if (!column) {
             throw new Error('Такой колонки не существует');
         }
         return await this.columnRepository.remove(column);
     }
 
-    async getColumnById(columnID: string) {
-        const column = this.columnRepository.findOneBy({id: +columnID});
+    async getColumnById(columnID: string, userID: string) {
+        const user = await this.userService.getUserById(userID);
+        const column = this.columnRepository.findOneBy({id: +columnID, user});
         if (!column) {
           throw new Error('Такой колонки не существует');
         }
         return column;
     }
 
-    async updateColumnById(columnID: string, columntData: ColumnBox) {
-        const column = await this.columnRepository.findOneBy({id: +columnID});
+    async updateColumnById(columnID: string, columntData: ColumnBox, userID: string) {
+        const user = await this.userService.getUserById(userID);
+        const column = await this.columnRepository.findOneBy({id: +columnID, user});
         if (!column) {
           throw new Error('Такой колонки не существует');
         }
