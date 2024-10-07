@@ -44,13 +44,13 @@ export class ColumnService {
         return column;
     }
 
-    async updateColumnById(columnID: string, columntData: ColumnBox, userID: string) {
+    async updateColumnById(columnID: string, columnData: ColumnBox, userID: string) {
         const user = await this.userService.getUserById(userID);
         const column = await this.columnRepository.findOneBy({id: +columnID, user});
         if (!column) {
           throw new Error('Такой колонки не существует');
         }
-        Object.assign(column, columntData);
+        Object.assign(column, columnData);
         return await this.columnRepository.save(column);
     }
 }

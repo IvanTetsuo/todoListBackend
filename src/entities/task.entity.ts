@@ -22,7 +22,7 @@ export class Task {
   dateOfCreation!: Date;
 
   @ApiProperty({example: '0', description: 'Позиция, очередность задачи внутри колонки'})
-  @Column({ type: 'int'})
+  @Column({ type: 'int', default: 0, unsigned: true})
   verticalPosition!: number;
 
   @ManyToOne(() => ColumnBox, (column) => column.tasks, { onDelete: 'CASCADE' })

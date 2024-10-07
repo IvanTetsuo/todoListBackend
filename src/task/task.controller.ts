@@ -4,7 +4,9 @@ import { TaskService } from './task.service';
 import { Task } from 'src/entities/task.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
+import { TaskPositionDto } from './dto/task-position.dto';
 
+@ApiTags('Таски')
 @UseGuards(JwtAuthGuard)
 @Controller('task')
 export class TaskController {
@@ -57,6 +59,16 @@ export class TaskController {
     ) {
         try {
             return await this.taskService.updateTaskById(taskID, taskData, userID);
+        } catch(err) {
+            throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Patch('update-task-position')
+    async updateTaskPosition(@Body('positions') positions: TaskPositionDto, @ReqUserID() userID: string) {
+        return await this.taskService.updateTaskPosition(positions, userID);
+        try {
+            return await this.taskService.updateTaskPosition(positions, userID);
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
         }
