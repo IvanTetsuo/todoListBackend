@@ -18,9 +18,9 @@ export class ColumnBox {
   @Column({ type: 'timestamptz', default: 'NOW()'}) // нужен ли length
   dateOfCreation!: Date;
 
-//   @ApiProperty({example: '0', description: 'Позиция, очередность колонки'})
-//   @Column({ type: 'int', length: 100, /* unique: true */})
-//   horizontalPosition!: number;
+  @ApiProperty({example: '0', description: 'Позиция, очередность колонки'})
+  @Column({ type: 'int', default: 0, unsigned: true, /* unique: true */})
+  horizontalPosition!: number;
 // будут дополнительные две таблицы, которые хранят в себе инфу о позиции колонки и отдельная таблица для положения тасков
 
 // круд начинать с верхнего уровня (с проджекта т.е.)

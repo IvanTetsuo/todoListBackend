@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ColumnBox } from 'src/entities/column.entity';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { ColumnPositionDto } from './dto/column-position.dto';
 
 @Injectable()
 export class ColumnService {
@@ -53,4 +54,16 @@ export class ColumnService {
         Object.assign(column, columnData);
         return await this.columnRepository.save(column);
     }
+
+    async updateColumnPosition(columnPositionDto: ColumnPositionDto, userID: string): Promise<ColumnBox[]> {
+        const user = await this.userService.getUserById(userID);
+        console.log(columnPositionDto);
+        const columns = await this.columnRepository.find({where: {id: In(columnPositionDto.positions), user}});
+        columnPositionDto.positions.map(async (id, index) => {
+            const column = columns.find((item) => item.id === id );
+            column.horizontalPosition = index;
+        });
+        await this.columnRepository.save(columns);
+        return columns.sort((taskA, taskB) => taskA.horizontalPosition - taskB.horizontalPosition);
+      }
 }

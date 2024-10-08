@@ -4,6 +4,7 @@ import { ColumnService } from './column.service';
 import { ColumnBox } from 'src/entities/column.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
+import { ColumnPositionDto } from './dto/column-position.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('column')
@@ -57,6 +58,15 @@ export class ColumnController {
     ) {
         try {
             return await this.columnService.updateColumnById(columnID, columnData, userID);
+        } catch(err) {
+            throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Patch('update-column-position')
+    async updateColumnPosition(@Body() positions: ColumnPositionDto, @ReqUserID() userID: string) {
+        try {
+            return await this.columnService.updateColumnPosition(positions, userID);
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
         }

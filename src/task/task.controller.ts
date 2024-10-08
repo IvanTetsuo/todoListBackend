@@ -65,8 +65,7 @@ export class TaskController {
     }
 
     @Patch('update-task-position')
-    async updateTaskPosition(@Body('positions') positions: TaskPositionDto, @ReqUserID() userID: string) {
-        return await this.taskService.updateTaskPosition(positions, userID);
+    async updateTaskPosition(@Body() positions: TaskPositionDto, @ReqUserID() userID: string) {
         try {
             return await this.taskService.updateTaskPosition(positions, userID);
         } catch(err) {
