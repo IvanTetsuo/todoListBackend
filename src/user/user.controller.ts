@@ -12,13 +12,6 @@ export class UserController {
     private readonly userService: UserService,
   ) {}
 
-  @ApiOperation({summary: 'Создание пользователя'})
-  @ApiResponse({status: 200, type: User})
-  @Post('create-new-accaunt')
-  async createUser(@Body() userDto: CreateUserDto) {
-    return this.userService.createUser(userDto);
-  }
-
   @ApiOperation({summary: 'Получить всех пользователей'})
   @ApiResponse({status: 200, type: [User]})
   @UseGuards(JwtAuthGuard)

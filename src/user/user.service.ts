@@ -11,8 +11,8 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async createUser(dto: CreateUserDto): Promise<User> {
-    const newUser = this.userRepository.create(dto); // не нужен await? в видосе был нужен
+  async createUser(userData: CreateUserDto): Promise<User> {
+    const newUser = this.userRepository.create(userData);
     await this.userRepository.save(newUser);
     return newUser;
   }
@@ -23,12 +23,6 @@ export class UserService {
   }
 
   async deleteUser(userID: string): Promise<User> {
-    // await this.userRepository
-    // .createQueryBuilder()
-    // .delete()
-    // .from(User)
-    // .where("id = :id", { id: userID })
-    // .execute();
     const user = await this.userRepository.findOneBy({id: +userID});
     if (!user) {
       throw new Error('Такого пользователя не существует');

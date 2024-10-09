@@ -4,6 +4,7 @@ import { DeskService } from './desk.service';
 import { Desk } from 'src/entities/desk.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
+import { CreateDeskDto } from './dto/create-desk.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('desk')
@@ -11,7 +12,7 @@ export class DeskController {
     constructor(private deskService: DeskService) {}
 
     @Post('create-new-desk')
-    async createDesk(@Body() deskData: Desk, @ReqUserID() userID: string) {
+    async createDesk(@Body() deskData: CreateDeskDto, @ReqUserID() userID: string) {
         return this.deskService.createDesk(deskData, userID);
     }
 
@@ -52,7 +53,7 @@ export class DeskController {
     @Patch('update-desk/:deskID')
     async updateDeskById(
         @Param('deskID') deskID: string,
-        @Body() deskData: Desk,
+        @Body() deskData: CreateDeskDto,
         @ReqUserID() userID: string
     ) {
         try {

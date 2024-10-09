@@ -5,6 +5,7 @@ import { Task } from 'src/entities/task.entity';
 import { UserService } from 'src/user/user.service';
 import { In, Repository } from 'typeorm';
 import { TaskPositionDto } from './dto/task-position.dto';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -18,7 +19,7 @@ export class TaskService {
         private readonly userService: UserService,
     ) {}
 
-    async createTask(taskData: Task, userID: string): Promise<Task> {
+    async createTask(taskData: CreateTaskDto, userID: string): Promise<Task> {
         const user = await this.userService.getUserById(userID);
         const newTask = this.taskRepository.create(taskData);
         newTask.user = user;
@@ -28,31 +29,51 @@ export class TaskService {
 
     async getAllTasks(userID: string): Promise<Task[]> {
         const user = await this.userService.getUserById(userID);
-        const tasks = await this.taskRepository.find({where: {user}});
+        const tasks = await this.taskRepository.find({
+          where: {user},
+          relations: {
+              user: true,
+          },
+      });
         return tasks;
     }
 
     async deleteTask(taskID: string, userID: string): Promise<Task> {
         const user = await this.userService.getUserById(userID);
-        const task = await this.taskRepository.findOneBy({id: +taskID, user});
+        const [task] = await this.taskRepository.find({
+          where: {id: +taskID, user},
+          relations: {
+              user: true,
+          },
+      });
         if (!task) {
             throw new Error('Такого задания не существует');
         }
         return await this.taskRepository.remove(task);
     }
 
-    async getTaskById(taskID: string, userID: string) {
+    async getTaskById(taskID: string, userID: string): Promise<Task> {
         const user = await this.userService.getUserById(userID);
-        const task = this.taskRepository.findOneBy({id: +taskID, user});
+        const [task] = await this.taskRepository.find({
+          where: {id: +taskID, user},
+          relations: {
+              user: true,
+          },
+      });
         if (!task) {
           throw new Error('Такого задания не существует');
         }
         return task;
     }
 
-    async updateTaskById(taskID: string, taskData: Task, userID: string) {
+    async updateTaskById(taskID: string, taskData: CreateTaskDto, userID: string): Promise<Task> {
         const user = await this.userService.getUserById(userID);
-        const task = await this.taskRepository.findOneBy({id: +taskID, user});
+        const [task] = await this.taskRepository.find({
+          where: {id: +taskID, user},
+          relations: {
+              user: true,
+          },
+      });
         if (!task) {
           throw new Error('Такого задания не существует');
         }
@@ -62,9 +83,8 @@ export class TaskService {
 
     async updateTaskPosition(taskPositionDto: TaskPositionDto, userID: string): Promise<Task[]> {
       const user = await this.userService.getUserById(userID);
-      console.log(taskPositionDto);
       const tasks = await this.taskRepository.find({where: {id: In(taskPositionDto.positions), user}});
-      taskPositionDto.positions.map(async (id, index) => {
+      taskPositionDto.positions.map((id, index) => {
         const task = tasks.find((item) => item.id === id );
         task.verticalPosition = index;
       });

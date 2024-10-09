@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Desk } from 'src/entities/desk.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
+import { CreateDeskDto } from './dto/create-desk.dto';
 
 @Injectable()
 export class DeskService {
@@ -12,7 +13,7 @@ export class DeskService {
         private readonly userService: UserService,
     ) {}
 
-    async createDesk(deskData: Desk, userID: string): Promise<Desk> {
+    async createDesk(deskData: CreateDeskDto, userID: string): Promise<Desk> {
         const user = await this.userService.getUserById(userID);
         const newDesk = this.deskRepository.create(deskData);
         newDesk.user = user;
@@ -22,31 +23,51 @@ export class DeskService {
 
     async getAllDesks(userID: string): Promise<Desk[]> {
         const user = await this.userService.getUserById(userID);
-        const desks = await this.deskRepository.find({where: {user}});
+        const desks = await this.deskRepository.find({
+            where: {user},
+            relations: {
+                user: true,
+            },
+        });
         return desks;
     }
 
     async deleteDesk(deskID: string, userID: string): Promise<Desk> {
         const user = await this.userService.getUserById(userID);
-        const desk = await this.deskRepository.findOneBy({id: +deskID, user});
+        const [desk] = await this.deskRepository.find({
+            where: {id: +deskID, user},
+            relations: {
+                user: true,
+            },
+        });
         if (!desk) {
             throw new Error('Такой доски не существует');
         }
         return await this.deskRepository.remove(desk);
     }
 
-    async getDeskById(deskID: string, userID: string) {
+    async getDeskById(deskID: string, userID: string): Promise<Desk> {
         const user = await this.userService.getUserById(userID);
-        const desk = this.deskRepository.findOneBy({id: +deskID, user});
+        const [desk] = await this.deskRepository.find({
+            where: {id: +deskID, user},
+            relations: {
+                user: true,
+            },
+        });
         if (!desk) {
           throw new Error('Такой доски не существует');
         }
         return desk;
     }
 
-    async updateDeskById(deskID: string, deskData: Desk, userID: string) {
+    async updateDeskById(deskID: string, deskData: CreateDeskDto, userID: string): Promise<Desk> {
         const user = await this.userService.getUserById(userID);
-        const desk = await this.deskRepository.findOneBy({id: +deskID, user});
+        const [desk] = await this.deskRepository.find({
+            where: {id: +deskID, user},
+            relations: {
+                user: true,
+            },
+        });
         if (!desk) {
           throw new Error('Такой доски не существует');
         }

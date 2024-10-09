@@ -5,6 +5,7 @@ import { Project } from 'src/entities/project.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
 import { User } from 'src/entities/user.entity';
+import { CreateProjectDto } from './dto/create-project.dto';
 
 @ApiTags('Проект')
 @UseGuards(JwtAuthGuard)
@@ -13,7 +14,7 @@ export class ProjectController {
     constructor(private projectService: ProjectService) {}
 
     @Post('create-new-project')
-    async createProject(@Body() projectData: Project, @ReqUserID() userID: string) {
+    async createProject(@Body() projectData: CreateProjectDto, @ReqUserID() userID: string) {
         return this.projectService.createProject(projectData, userID);
     }
 
@@ -54,7 +55,7 @@ export class ProjectController {
     @Patch('update-project/:projectID')
     async updateProjectById(
         @Param('projectID') projectID: string,
-        @Body() projectData: Project,
+        @Body() projectData: CreateProjectDto,
         @ReqUserID() userID: string
     ) {
         try {

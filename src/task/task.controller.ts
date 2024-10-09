@@ -5,6 +5,7 @@ import { Task } from 'src/entities/task.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
 import { TaskPositionDto } from './dto/task-position.dto';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @ApiTags('Таски')
 @UseGuards(JwtAuthGuard)
@@ -13,7 +14,7 @@ export class TaskController {
     constructor(private taskService: TaskService) {}
 
     @Post('create-new-task')
-    async createTask(@Body() taskData: Task, @ReqUserID() userID: string) {
+    async createTask(@Body() taskData: CreateTaskDto, @ReqUserID() userID: string) {
         return this.taskService.createTask(taskData, userID);
     }
 
@@ -54,7 +55,7 @@ export class TaskController {
     @Patch('update-task/:taskID')
     async updateTaskById(
         @Param('taskID') taskID: string,
-        @Body() taskData: Task,
+        @Body() taskData: CreateTaskDto,
         @ReqUserID() userID: string
     ) {
         try {

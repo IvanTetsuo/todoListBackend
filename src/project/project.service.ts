@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from 'src/entities/project.entity';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
+import { CreateProjectDto } from './dto/create-project.dto';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class ProjectService {
         private readonly userService: UserService,
     ) {}
 
-    async createProject(projectData: Project, userID: string): Promise<Project> {
+    async createProject(projectData: CreateProjectDto, userID: string): Promise<Project> {
         const user = await this.userService.getUserById(userID);
         const newProject = this.projectRepository.create(projectData);
         newProject.user = user;
@@ -23,31 +24,51 @@ export class ProjectService {
 
     async getAllProjects(userID: string): Promise<Project[]> {
         const user = await this.userService.getUserById(userID);
-        const projects = await this.projectRepository.find({where: {user}});
+        const projects = await this.projectRepository.find({
+            where: {user},
+            relations: {
+                user: true,
+            },
+        });
         return projects;
     }
 
     async deleteProject(projectID: string, userID: string): Promise<Project> {
         const user = await this.userService.getUserById(userID);
-        const project = await this.projectRepository.findOneBy({id: +projectID, user});
+        const [project] = await this.projectRepository.find({
+            where: {id: +projectID, user},
+            relations: {
+                user: true,
+            },
+        });
         if (!project) {
             throw new Error('Такого проекта не существует');
         }
         return await this.projectRepository.remove(project);
     }
 
-    async getProjectById(projectID: string, userID: string) {
+    async getProjectById(projectID: string, userID: string): Promise<Project> {
         const user = await this.userService.getUserById(userID);
-        const project = this.projectRepository.findOneBy({id: +projectID, user});
+        const [project] = await this.projectRepository.find({
+            where: {id: +projectID, user},
+            relations: {
+                user: true,
+            },
+        });
         if (!project) {
           throw new Error('Такого проекта не существует');
         }
         return project;
     }
 
-    async updateProjectById(projectID: string, projectData: Project, userID: string) {
+    async updateProjectById(projectID: string, projectData: CreateProjectDto, userID: string): Promise<Project> {
         const user = await this.userService.getUserById(userID);
-        const project = await this.projectRepository.findOneBy({id: +projectID, user});
+        const [project] = await this.projectRepository.find({
+            where: {id: +projectID, user},
+            relations: {
+                user: true,
+            },
+        });
         if (!project) {
           throw new Error('Такого проекта не существует');
         }

@@ -5,6 +5,7 @@ import { ColumnBox } from 'src/entities/column.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
 import { ColumnPositionDto } from './dto/column-position.dto';
+import { CreateColumnDto } from './dto/create-column.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('column')
@@ -12,7 +13,7 @@ export class ColumnController {
     constructor(private columnService: ColumnService) {}
 
     @Post('create-new-column')
-    async createColumn(@Body() columnData: ColumnBox, @ReqUserID() userID: string) {
+    async createColumn(@Body() columnData: CreateColumnDto, @ReqUserID() userID: string) {
         return this.columnService.createColumn(columnData, userID);
     }
 
@@ -53,7 +54,7 @@ export class ColumnController {
     @Patch('update-column/:columnID')
     async updateColumnById(
         @Param('columnID') columnID: string,
-        @Body() columnData: ColumnBox,
+        @Body() columnData: CreateColumnDto,
         @ReqUserID() userID: string
     ) {
         try {

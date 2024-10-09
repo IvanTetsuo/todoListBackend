@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/entities/user.entity';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
         return this.generateToken(user);
     }
 
-    async registration(userData: User) {
+    async registration(userData: CreateUserDto) {
         const candidate = await this.userService.getUserByEmail(userData.email);
         if (candidate) {
             //ОБРАБОТКА ОШИБКИ (такой тип ошибки со статусом и т.д. выписать в контроллер)
