@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, HttpException, HttpStatus, UseGuards, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Patch,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -9,18 +22,16 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UserController {
-  constructor (
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({summary: 'Получить всех пользователей'})
-  @ApiResponse({status: 200, type: [User]})
+  @ApiOperation({ summary: 'Получить всех пользователей' })
+  @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard)
   @Get('get-all-users')
   async getAllUsers() {
     try {
       return await this.userService.getAllUsers();
-    } catch(err) {
+    } catch (err) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
   }
@@ -32,7 +43,7 @@ export class UserController {
     }
     try {
       return await this.userService.deleteUser(userID);
-    } catch(err) {
+    } catch (err) {
       throw new HttpException(err.message, HttpStatus.FORBIDDEN);
     }
   }
@@ -45,18 +56,20 @@ export class UserController {
     }
     try {
       return await this.userService.getUserById(userID);
-    } catch(err) {
+    } catch (err) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
   }
 
   @Patch('update-self/:userID')
-  async updateUserById(@Param('userID') userID: string,
-  @Body() userDto: CreateUserDto) {
+  async updateUserById(
+    @Param('userID') userID: string,
+    @Body() userDto: CreateUserDto,
+  ) {
     try {
       return await this.userService.updateUserById(userID, userDto);
-    } catch(err) {
+    } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
-  } 
+  }
 }

@@ -19,11 +19,10 @@ import { Desk } from './entities/desk.entity';
 import { ColumnBox } from './entities/column.entity';
 import { Task } from './entities/task.entity';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal:true,
+      isGlobal: true,
       envFilePath: '.development.env',
     }),
     TypeOrmModule.forRoot({
@@ -38,7 +37,7 @@ import { Task } from './entities/task.entity';
         Project,
         Desk,
         ColumnBox,
-        Task
+        Task,
         // __dirname + '/../**/*.entity{.ts,.js}',
       ],
       synchronize: true,
@@ -50,7 +49,12 @@ import { Task } from './entities/task.entity';
     ColumnModule,
     TaskModule,
   ],
-  controllers: [AppController, AuthController, DeskController, ColumnController],
+  controllers: [
+    AppController,
+    AuthController,
+    DeskController,
+    ColumnController,
+  ],
   providers: [AppService, AuthService],
 })
 export class AppModule {}

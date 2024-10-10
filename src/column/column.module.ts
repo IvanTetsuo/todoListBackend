@@ -6,12 +6,9 @@ import { ColumnController } from './column.controller';
 import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ColumnBox]),
-    UserModule,
-  ],
+  imports: [TypeOrmModule.forFeature([ColumnBox]), UserModule],
   controllers: [ColumnController],
   providers: [ColumnService],
-  exports: [ColumnService]
+  exports: [ColumnService],
 })
 export class ColumnModule {}

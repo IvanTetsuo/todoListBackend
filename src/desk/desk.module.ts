@@ -6,10 +6,7 @@ import { Desk } from 'src/entities/desk.entity';
 import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Desk]),
-    UserModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Desk]), UserModule],
   controllers: [DeskController],
   providers: [DeskService],
   exports: [DeskService],
