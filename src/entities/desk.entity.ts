@@ -30,7 +30,4 @@ export class Desk {
 
   @ManyToOne(() => User, (user) => user.desks, { onDelete: 'CASCADE' })
   user: User;
-
-  // user_id
-
 }

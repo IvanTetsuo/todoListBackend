@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ColumnService } from './column.service';
 import { ColumnBox } from 'src/entities/column.entity';
@@ -7,6 +7,7 @@ import { ReqUserID } from 'src/common/user/user.decorator';
 import { ColumnPositionDto } from './dto/column-position.dto';
 import { CreateColumnDto } from './dto/create-column.dto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('column')
 export class ColumnController {

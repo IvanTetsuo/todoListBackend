@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TaskService } from './task.service';
 import { Task } from 'src/entities/task.entity';
@@ -8,6 +8,7 @@ import { TaskPositionDto } from './dto/task-position.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 
 @ApiTags('Таски')
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('task')
 export class TaskController {

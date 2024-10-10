@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DeskService } from './desk.service';
 import { Desk } from 'src/entities/desk.entity';
@@ -6,6 +6,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReqUserID } from 'src/common/user/user.decorator';
 import { CreateDeskDto } from './dto/create-desk.dto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('desk')
 export class DeskController {
@@ -13,7 +14,11 @@ export class DeskController {
 
     @Post('create-new-desk')
     async createDesk(@Body() deskData: CreateDeskDto, @ReqUserID() userID: string) {
-        return this.deskService.createDesk(deskData, userID);
+        try {
+            return this.deskService.createDesk(deskData, userID);
+        } catch(err) {
+            throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        }
     }
 
     @Get('get-all-desks')

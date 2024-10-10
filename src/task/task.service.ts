@@ -32,7 +32,8 @@ export class TaskService {
         const tasks = await this.taskRepository.find({
           where: {user},
           relations: {
-              user: true,
+            user: true,
+            column: true,
           },
       });
         return tasks;
@@ -43,7 +44,8 @@ export class TaskService {
         const [task] = await this.taskRepository.find({
           where: {id: +taskID, user},
           relations: {
-              user: true,
+            user: true,
+            column: true,
           },
       });
         if (!task) {
@@ -57,7 +59,8 @@ export class TaskService {
         const [task] = await this.taskRepository.find({
           where: {id: +taskID, user},
           relations: {
-              user: true,
+            user: true,
+            column: true,
           },
       });
         if (!task) {
@@ -71,7 +74,8 @@ export class TaskService {
         const [task] = await this.taskRepository.find({
           where: {id: +taskID, user},
           relations: {
-              user: true,
+            user: true,
+            column: true,
           },
       });
         if (!task) {

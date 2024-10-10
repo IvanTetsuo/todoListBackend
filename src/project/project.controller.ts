@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Body, Post, Get, Delete, Param, Patch, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ProjectService } from './project.service';
 import { Project } from 'src/entities/project.entity';
@@ -8,6 +8,7 @@ import { User } from 'src/entities/user.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 
 @ApiTags('Проект')
+@UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('project')
 export class ProjectController {

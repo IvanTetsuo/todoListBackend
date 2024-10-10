@@ -4,6 +4,7 @@ import { Project } from './project.entity';
 import { Desk } from './desk.entity';
 import { ColumnBox } from './column.entity';
 import { Task } from './task.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -13,6 +14,7 @@ export class User {
 
   @ApiProperty({example: 'user@mail.ru', description: 'Почтовый адрес'})
   @Column({ type: 'varchar', length: 100, unique: true })
+  @Exclude()
   email!: string;
 
   @ApiProperty({example: 'login', description: 'Логин'})
@@ -21,6 +23,7 @@ export class User {
 
   @ApiProperty({example: 'not12345', description: 'Пароль'})
   @Column({ type: 'varchar', length: 100 })
+  @Exclude()
   password!: string;
 
   @ApiProperty({example: 'Ivan', description: 'Имя'})

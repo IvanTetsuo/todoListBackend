@@ -28,6 +28,7 @@ export class ProjectService {
             where: {user},
             relations: {
                 user: true,
+                desks: true,
             },
         });
         return projects;
@@ -39,6 +40,7 @@ export class ProjectService {
             where: {id: +projectID, user},
             relations: {
                 user: true,
+                desks: true,
             },
         });
         if (!project) {
@@ -53,6 +55,7 @@ export class ProjectService {
             where: {id: +projectID, user},
             relations: {
                 user: true,
+                desks: true,
             },
         });
         if (!project) {
@@ -67,6 +70,7 @@ export class ProjectService {
             where: {id: +projectID, user},
             relations: {
                 user: true,
+                desks: true,
             },
         });
         if (!project) {

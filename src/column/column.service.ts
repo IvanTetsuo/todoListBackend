@@ -28,6 +28,8 @@ export class ColumnService {
             where: {user},
             relations: {
                 user: true,
+                desk: true,
+                tasks: true,
             },
         });
         return columns;
@@ -39,6 +41,8 @@ export class ColumnService {
             where: {id: +columnID, user},
             relations: {
                 user: true,
+                desk: true,
+                tasks: true,
             },
         });
         if (!column) {
@@ -53,6 +57,8 @@ export class ColumnService {
             where: {id: +columnID, user},
             relations: {
                 user: true,
+                desk: true,
+                tasks: true,
             },
         });
         if (!column) {
@@ -67,6 +73,8 @@ export class ColumnService {
             where: {id: +columnID, user},
             relations: {
                 user: true,
+                desk: true,
+                tasks: true,
             },
         });
         if (!column) {
