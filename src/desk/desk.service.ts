@@ -17,9 +17,6 @@ export class DeskService {
         const user = await this.userService.getUserById(userID);
         const newDesk = this.deskRepository.create(deskData);
         newDesk.user = user;
-        // if (!newDesk) {
-        //     throw new Error('Такой доски не существует');
-        // }
         await this.deskRepository.save(newDesk);
         return newDesk;
     }

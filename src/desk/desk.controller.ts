@@ -15,7 +15,7 @@ export class DeskController {
     @Post('create-new-desk')
     async createDesk(@Body() deskData: CreateDeskDto, @ReqUserID() userID: string) {
         try {
-            return this.deskService.createDesk(deskData, userID);
+            return await this.deskService.createDesk(deskData, userID);
         } catch(err) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
